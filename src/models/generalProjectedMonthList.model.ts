@@ -1,9 +1,20 @@
 import { Months } from "../types/common.types";
-import { GeneralProjected, GeneralProjectedList, GeneralProjectedNoId } from "../types/generalProjected.types";
+import { GeneralProjected, GeneralProjectedForMonth, GeneralProjectedList, GeneralProjectedNoId } from "../types/generalProjected.types";
 import { v4 as uuidv4 } from 'uuid';
 
 class GeneralProjectedMonthList {
+    static #instance: GeneralProjectedMonthList;
     #projectedMonths:GeneralProjectedList = {};
+
+    private constructor() {}
+
+    public static get instance(): GeneralProjectedMonthList {
+        if (!GeneralProjectedMonthList.#instance) {
+            GeneralProjectedMonthList.#instance = new GeneralProjectedMonthList();
+        }
+
+        return GeneralProjectedMonthList.#instance;
+    }
 
     add(data:GeneralProjectedNoId) {
         const genProj:GeneralProjected = {
@@ -20,16 +31,16 @@ class GeneralProjectedMonthList {
         }
     }
 
-    getFull() {
+    getFull():GeneralProjectedList {
         return this.#projectedMonths;
     }
 
-    getMonth(month: Months, year: number) {
+    getMonth(month: Months, year: number): GeneralProjectedForMonth {
         const monthYear = (year*100)+month;
         return this.#projectedMonths[monthYear];
     }
 
-    getPeriod(startMonth:Months, startYear: number, endMonth:Months, endYear: number) {
+    getPeriod(startMonth:Months, startYear: number, endMonth:Months, endYear: number):GeneralProjectedList {
         let countMonthYear = (startYear*100)+startMonth;
         const endMonthYear = (endYear*100)+endMonth;
         let projectedPeriod:GeneralProjectedList = {};
@@ -47,4 +58,6 @@ class GeneralProjectedMonthList {
     }
 }
 
-export default GeneralProjectedMonthList;
+const generalProjectedMonthList = GeneralProjectedMonthList.instance;
+
+export default generalProjectedMonthList;

@@ -1,25 +1,27 @@
-import { Months } from "./common.types"
-
 type GeneralProjectedNoId = {
     month: Months,
     year: number,
     cost: number,
-    budget: number,
+    name: string
 }
 
 type GeneralProjected = {
     id: string,
 } & GeneralProjectedNoId
 
+type GeneralProjectedForMonth = {
+    totalCost: number,
+    budget: number,
+    items: GeneralProjected[]
+}
+
 type GeneralProjectedList = {
-    [monthYear:number]: {
-        totalCost: number
-        items: GeneralProjected[]
-    }
+    [monthYear:number]: GeneralProjectedForMonth
 }
 
 export type {
     GeneralProjected,
     GeneralProjectedNoId,
-    GeneralProjectedList
+    GeneralProjectedList,
+    GeneralProjectedForMonth
 }

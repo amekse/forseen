@@ -14,8 +14,7 @@ class ExpenseData {
         saveDateEnd: {
             month: 1,
             year: 2024
-        },
-        monthlyBudget: []
+        }
     }
     #error: ErrorMessages = false;
 
