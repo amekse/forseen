@@ -1,3 +1,5 @@
+import { Months } from "./common.types"
+
 type GeneralProjectedNoId = {
     month: Months,
     year: number,
@@ -11,7 +13,6 @@ type GeneralProjected = {
 
 type GeneralProjectedForMonth = {
     totalCost: number,
-    budget: number,
     items: GeneralProjected[]
 }
 
