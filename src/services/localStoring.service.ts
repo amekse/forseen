@@ -1,5 +1,7 @@
 import { GeneralProjectedList } from "../types/generalProjected.types";
 
+// TODO: error handling for set
+
 function setGeneralProjection(data:GeneralProjectedList) {
     localStorage.setItem('lastGenProj', JSON.stringify(data));
 }

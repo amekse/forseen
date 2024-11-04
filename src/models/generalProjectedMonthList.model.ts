@@ -1,4 +1,4 @@
-import { getGeneralProjection } from "../services/localStoring.service";
+import { getGeneralProjection, setGeneralProjection } from "../services/localStoring.service";
 import { Months } from "../types/common.types";
 import { GeneralProjected, GeneralProjectedForMonth, GeneralProjectedList, GeneralProjectedNoId } from "../types/generalProjected.types";
 import { v4 as uuidv4 } from 'uuid';
@@ -23,9 +23,14 @@ class GeneralProjectedMonthList {
         let savedProj:GeneralProjectedList = {};
         Object.keys(data).forEach(gpKey => {
             if (typeof gpKey === "number") {
-                savedProj[gpKey] = data[gpKey];
+                let innerData = data[gpKey];
+                if (innerData.hasOwnProperty('totalCost') && typeof innerData.totalCost === "number" && innerData.hasOwnProperty('items') && typeof innerData.items === "object")  {
+                    savedProj[gpKey] = innerData;
+                } else {
+                    logError("GeneralProjectedMonthList readFromLocalProjectedMonths GeneralProjectedForMonth", innerData);
+                }
             } else {
-                logError("GeneralProjectedMonthList readFromLocalProjectedMonths", data[gpKey]);
+                logError("GeneralProjectedMonthList readFromLocalProjectedMonths GeneralProjectedList", data[gpKey]);
             }
         });
         return savedProj;
@@ -44,6 +49,8 @@ class GeneralProjectedMonthList {
         } else {
             this.#projectedMonths[monthYear].totalCost = genProj.cost;
         }
+
+        setGeneralProjection(this.#projectedMonths);
     }
 
     getFull():GeneralProjectedList {
