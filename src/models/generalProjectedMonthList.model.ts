@@ -1,10 +1,12 @@
+import { getGeneralProjection } from "../services/localStoring.service";
 import { Months } from "../types/common.types";
 import { GeneralProjected, GeneralProjectedForMonth, GeneralProjectedList, GeneralProjectedNoId } from "../types/generalProjected.types";
 import { v4 as uuidv4 } from 'uuid';
+import logError from "../utils/logError.utils";
 
 class GeneralProjectedMonthList {
     static #instance: GeneralProjectedMonthList;
-    #projectedMonths:GeneralProjectedList = {};
+    #projectedMonths:GeneralProjectedList = this.readFromLocalProjectedMonths();
 
     private constructor() {}
 
@@ -14,6 +16,19 @@ class GeneralProjectedMonthList {
         }
 
         return GeneralProjectedMonthList.#instance;
+    }
+
+    readFromLocalProjectedMonths():GeneralProjectedList {
+        let data = getGeneralProjection();
+        let savedProj:GeneralProjectedList = {};
+        Object.keys(data).forEach(gpKey => {
+            if (typeof gpKey === "number") {
+                savedProj[gpKey] = data[gpKey];
+            } else {
+                logError("GeneralProjectedMonthList readFromLocalProjectedMonths", data[gpKey]);
+            }
+        });
+        return savedProj;
     }
 
     add(data:GeneralProjectedNoId) {

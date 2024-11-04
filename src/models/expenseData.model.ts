@@ -1,6 +1,7 @@
 import { ErrorMessages } from "../types/common.types";
 import { ExpenseItem, ExpenseItemNoId } from "../types/expenseItem.type";
 import { v4 as uuidv4 } from 'uuid';
+import logError from "../utils/logError.utils";
 
 class ExpenseData {
     #defaultData:ExpenseItem = {
@@ -39,6 +40,7 @@ class ExpenseData {
             errorList.push('End date must be greater than start date or year must be greater than 2024');
         }
         this.#error = errorList;
+        logError("Expense Data Constructor", this.#error);
     }
 
     set (data:ExpenseItemNoId):ExpenseItem {
@@ -62,6 +64,7 @@ class ExpenseData {
             errorList.push('End date must be greater than start date or year must be greater than 2024');
         }
         this.#error = errorList;
+        logError("Expense Data Set", this.#error);
         return this.#defaultData;
     }
 
