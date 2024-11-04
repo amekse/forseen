@@ -33,14 +33,19 @@ class ExpenseData {
             errorList.push('Cost cannot be 0')
         }
 
-        if (data.saveDateEnd.month > data.saveDateStart.month && data.saveDateStart.month > 2024 && data.saveDateEnd.month >= data.saveDateStart.month) {
+        const monthYearStart = (data.saveDateStart.year*100)+data.saveDateStart.month;
+        const monthYearEnd = (data.saveDateEnd.year*100)+data.saveDateEnd.month;
+        if (monthYearEnd > monthYearStart) {
             this.#defaultData.saveDateStart = data.saveDateStart;
             this.#defaultData.saveDateEnd = data.saveDateEnd;
         } else {
             errorList.push('End date must be greater than start date or year must be greater than 2024');
         }
-        this.#error = errorList;
-        logError("Expense Data Constructor", this.#error);
+        
+        if (errorList.length > 0) {
+            this.#error = errorList;
+            logError("Expense Data Constructor", this.#error);
+        }
     }
 
     set (data:ExpenseItemNoId):ExpenseItem {
@@ -57,14 +62,18 @@ class ExpenseData {
             errorList.push('Cost cannot be 0')
         }
 
-        if (data.saveDateEnd.month > data.saveDateStart.month && data.saveDateStart.month > 2024 && data.saveDateEnd.month >= data.saveDateStart.month) {
+        const monthYearStart = (data.saveDateStart.year*100)+data.saveDateStart.month;
+        const monthYearEnd = (data.saveDateEnd.year*100)+data.saveDateEnd.month;
+        if (monthYearEnd > monthYearStart) {
             this.#defaultData.saveDateStart = data.saveDateStart;
             this.#defaultData.saveDateEnd = data.saveDateEnd;
         } else {
             errorList.push('End date must be greater than start date or year must be greater than 2024');
         }
-        this.#error = errorList;
-        logError("Expense Data Set", this.#error);
+        if (errorList.length > 0) {
+            this.#error = errorList;
+            logError("Expense Data Set", this.#error);
+        }
         return this.#defaultData;
     }
 

@@ -28,13 +28,11 @@ function addExpenseToList(data:ExpenseData): ErrorMessages {
     } else {
         const expenseItem = data.get();
         const totalMonths = totalMonthsCount(expenseItem);
-        const monthlyCost = expenseItem.cost/totalMonths;
+        const monthlyCost = Math.round(expenseItem.cost/totalMonths);
 
         let countYear = expenseItem.saveDateStart.year;
         let countMonth = expenseItem.saveDateStart.month;
         for (let curMonth = 0; curMonth < totalMonths; curMonth++) {
-            countMonth = countMonth + curMonth;
-
             generalProjectedMonthList.add({
                 month: countMonth as Months,
                 year: countYear,
@@ -42,9 +40,11 @@ function addExpenseToList(data:ExpenseData): ErrorMessages {
                 name: expenseItem.itemName
             })
 
-            if (curMonth === 12) {
+            if (countMonth === 12) {
                 countMonth = 1;
                 countYear += 1;
+            } else {
+                countMonth += 1;
             }
         }
     }

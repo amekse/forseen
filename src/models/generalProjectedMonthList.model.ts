@@ -37,18 +37,22 @@ class GeneralProjectedMonthList {
     }
 
     add(data:GeneralProjectedNoId) {
+        // console.log(data)
         const genProj:GeneralProjected = {
             id: `genprj-${uuidv4()}`,
             ...data
         };
 
         const monthYear = (genProj.year*100)+genProj.month;
-        this.#projectedMonths[monthYear].items.push(genProj);
-        if (this.#projectedMonths[monthYear].totalCost) {
-            this.#projectedMonths[monthYear].totalCost += genProj.cost;
-        } else {
-            this.#projectedMonths[monthYear].totalCost = genProj.cost;
+
+        if (this.#projectedMonths[monthYear] === undefined) {
+            this.#projectedMonths[monthYear] = {
+                items: [],
+                totalCost: 0
+            }
         }
+        this.#projectedMonths[monthYear].items.push(genProj);
+        this.#projectedMonths[monthYear].totalCost += Math.round(genProj.cost);
 
         setGeneralProjection(this.#projectedMonths);
     }
