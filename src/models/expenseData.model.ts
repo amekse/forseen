@@ -1,7 +1,7 @@
 import { ErrorMessages } from "../types/common.types";
 import { ExpenseItem, ExpenseItemNoId } from "../types/expenseItem.type";
 import { v4 as uuidv4 } from 'uuid';
-import logError from "../utils/logError.utils";
+import { logError } from "../utils/logger.utils";
 
 class ExpenseData {
     #defaultData:ExpenseItem = {

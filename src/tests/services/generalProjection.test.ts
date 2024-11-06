@@ -1,5 +1,6 @@
 import ExpenseData from "../../models/expenseData.model"
 import generalProjectedMonthList from "../../models/generalProjectedMonthList.model"
+import { clearAllData } from "../../services/common.services"
 import { addExpenseToList } from "../../services/generalProjection.service"
 
 describe('general projection', () => {
@@ -31,7 +32,7 @@ describe('general projection', () => {
     ]
 
     afterEach(() => {
-        generalProjectedMonthList.clearAll();
+        clearAllData();
     })
 
     test('single expense for month', () => {

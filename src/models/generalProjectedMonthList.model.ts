@@ -2,7 +2,7 @@ import { getGeneralProjection, setGeneralProjection } from "../services/localSto
 import { Months } from "../types/common.types";
 import { GeneralProjected, GeneralProjectedForMonth, GeneralProjectedList, GeneralProjectedNoId } from "../types/generalProjected.types";
 import { v4 as uuidv4 } from 'uuid';
-import logError from "../utils/logError.utils";
+import { logError } from "../utils/logger.utils";
 
 class GeneralProjectedMonthList {
     static #instance: GeneralProjectedMonthList;
@@ -21,16 +21,19 @@ class GeneralProjectedMonthList {
     readFromLocalProjectedMonths():GeneralProjectedList {
         let data = getGeneralProjection();
         let savedProj:GeneralProjectedList = {};
+        let errorList = [];
         Object.keys(data).forEach(gpKey => {
             if (typeof gpKey === "number") {
                 let innerData = data[gpKey];
                 if (innerData.hasOwnProperty('totalCost') && typeof innerData.totalCost === "number" && innerData.hasOwnProperty('items') && typeof innerData.items === "object")  {
                     savedProj[gpKey] = innerData;
                 } else {
-                    logError("GeneralProjectedMonthList readFromLocalProjectedMonths GeneralProjectedForMonth", innerData);
+                    errorList.push('Inner data missing');
+                    logError("GeneralProjectedMonthList readFromLocalProjectedMonths GeneralProjectedForMonth", errorList, innerData);
                 }
             } else {
-                logError("GeneralProjectedMonthList readFromLocalProjectedMonths GeneralProjectedList", data[gpKey]);
+                errorList.push('list bad keys');
+                logError("GeneralProjectedMonthList readFromLocalProjectedMonths GeneralProjectedList", errorList, data[gpKey]);
             }
         });
         return savedProj;
@@ -63,7 +66,15 @@ class GeneralProjectedMonthList {
 
     getMonth(month: Months, year: number): GeneralProjectedForMonth {
         const monthYear = (year*100)+month;
-        return this.#projectedMonths[monthYear];
+        if (this.#projectedMonths[monthYear] !== undefined) {
+            return this.#projectedMonths[monthYear];
+        } else {
+            let emptyData:GeneralProjectedForMonth = {
+                totalCost: 0,
+                items: []
+            };
+            return emptyData;
+        }
     }
 
     getPeriod(startMonth:Months, startYear: number, endMonth:Months, endYear: number):GeneralProjectedList {
@@ -71,7 +82,9 @@ class GeneralProjectedMonthList {
         const endMonthYear = (endYear*100)+endMonth;
         let projectedPeriod:GeneralProjectedList = {};
         while(countMonthYear <= endMonthYear) {
-            projectedPeriod[countMonthYear] = this.#projectedMonths[countMonthYear];
+            if (this.#projectedMonths[countMonthYear] !== undefined) {
+                projectedPeriod[countMonthYear] = this.#projectedMonths[countMonthYear];
+            }
             if (countMonthYear%100 === 12) {
                 let lastYear = Math.trunc(countMonthYear/100);
                 countMonthYear = ((lastYear+1)*100)+1;
