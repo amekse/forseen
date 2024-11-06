@@ -82,6 +82,11 @@ class GeneralProjectedMonthList {
 
         return projectedPeriod;
     }
+
+    clearAll() {
+        this.#projectedMonths = [];
+        setGeneralProjection(this.#projectedMonths);
+    }
 }
 
 const generalProjectedMonthList = GeneralProjectedMonthList.instance;
