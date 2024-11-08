@@ -1,13 +1,15 @@
 import { getBudgetList, setBudgetList } from "../services/localStoring.service";
 import { BudgetForMonth, BudgetForPeriod, BudgetList, BudgetWithAdjustment } from "../types/budget.type";
-import { Months } from "../types/common.types";
+import { ErrorMessages, Months } from "../types/common.types";
 import { GeneralProjectedForMonth } from "../types/generalProjected.types";
 import { logError } from "../utils/logger.utils";
 import generalProjectedMonthList from "./generalProjectedMonthList.model";
 
 class BudgetData {
     static #instance: BudgetData;
-    #budgetList:BudgetList = {};
+    #budgetList:BudgetList = {
+        totalExtraCost: 0
+    };
     private constructor() {}
 
     public static get instance(): BudgetData {
@@ -23,6 +25,7 @@ class BudgetData {
         let extraAmount = generalProjectionForMonth.totalCost - data.amount;
         let availableAdjustment = data.amount - generalProjectionForMonth.totalCost;
         let monthYear = (data.year*100)+data.month;
+        let exsistingExtraAmount = this.#budgetList[monthYear].extraAmount;
         this.#budgetList[monthYear] = {
             month: data.month,
             year: data.year,
@@ -31,6 +34,8 @@ class BudgetData {
             adjustAmount: 0,
             availableAdjustment: availableAdjustment >= 0 ? availableAdjustment : 0
         };
+        this.#budgetList.totalExtraCost -= exsistingExtraAmount;
+        this.#budgetList.totalExtraCost += extraAmount >= 0 ? extraAmount : 0;
         setBudgetList(this.#budgetList);
     }
 
@@ -52,6 +57,7 @@ class BudgetData {
                 adjustAmount: 0,
                 availableAdjustment: availableAdjustment >= 0 ? availableAdjustment : 0
             }
+            this.#budgetList.totalExtraCost += extraAmount >= 0 ? extraAmount : 0;
             countMonthYear += 1;
         }
     }
@@ -66,11 +72,14 @@ class BudgetData {
             extraAmount: extraAmount >= 0 ? extraAmount : 0,
             availableAdjustment: availableAdjustment >= 0 ? availableAdjustment : 0
         }
+        this.#budgetList.totalExtraCost += extraAmount >= 0 ? extraAmount : 0;
     }
 
     readFromLocalBudgetMonths():BudgetList {
         let data = getBudgetList();
-        let savedProj:BudgetList = {};
+        let savedProj:BudgetList = {
+            totalExtraCost: 0
+        };
         let errorList = [];
         Object.keys(data).forEach(gpKey => {
             if (typeof gpKey === "number") {
@@ -112,8 +121,23 @@ class BudgetData {
     }
 
     clearAll() {
-        this.#budgetList = {};
+        this.#budgetList = {
+            totalExtraCost: 0
+        };
         setBudgetList(this.#budgetList);
+    }
+
+    getTotalExtraAmount():number {
+        return this.#budgetList.totalExtraCost;
+    }
+
+    setAdjustmentAmount(amount:number, monthYear:number, month:Months, year:number): ErrorMessages {
+        if (this.#budgetList[monthYear]) {
+            this.#budgetList[monthYear].adjustAmount = amount;
+            return false;
+        } else {
+            return [`Please add budget for ${month} ${year}`];
+        }
     }
 
 }

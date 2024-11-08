@@ -13,6 +13,7 @@ type BudgetWithAdjustment = {
 } & BudgetForMonth;
 
 type BudgetList = {
+    totalExtraCost: number,
     [key:number] : BudgetWithAdjustment
 }
 

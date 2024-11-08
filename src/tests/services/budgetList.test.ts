@@ -42,6 +42,7 @@ describe('budget list', () => {
 
     test('add average leaving last month', () => {
         const expected:BudgetList = {
+            totalExtraCost: 0,
             "202502": {
                 month: 2,
                 year: 2025,
@@ -66,6 +67,7 @@ describe('budget list', () => {
 
     test('add expense data and check buget output', () => {
         const expected:BudgetList = {
+            totalExtraCost: 1400,
             "202501": {
                 month: 1,
                 year: 2025,
@@ -96,7 +98,8 @@ describe('budget list', () => {
     })
 
     test ('add budget for non-existing month and check', () => {
-        const expected = {
+        const expected:BudgetList = {
+            totalExtraCost: 400,
             "202501": {
                 month: 1,
                 year: 2025,
