@@ -115,6 +115,7 @@ class BudgetData {
         this.#budgetList = {};
         setBudgetList(this.#budgetList);
     }
+
 }
 
 const budgetData = BudgetData.instance;

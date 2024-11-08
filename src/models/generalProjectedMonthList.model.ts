@@ -102,6 +102,11 @@ class GeneralProjectedMonthList {
         this.#projectedMonths = [];
         setGeneralProjection(this.#projectedMonths);
     }
+
+    getProjectedMonthsList():string[] {
+        const monthsList:string[] = Object.keys(this.#projectedMonths);
+        return monthsList;
+    }
 }
 
 const generalProjectedMonthList = GeneralProjectedMonthList.instance;
