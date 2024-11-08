@@ -22,8 +22,8 @@ function setBudgetList(data:BudgetList) {
 }
 
 function getBudgetList():any {
-    let jsonData:any = [];
-    let data = localStorage.getItem('lastBudgetList') ?? "[]";
+    let jsonData:any = {};
+    let data = localStorage.getItem('lastBudgetList') ?? "{}";
     try {
         jsonData = JSON.parse(data);
     } catch (e:any) {

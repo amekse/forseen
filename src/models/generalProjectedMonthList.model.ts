@@ -3,6 +3,7 @@ import { Months } from "../types/common.types";
 import { GeneralProjected, GeneralProjectedForMonth, GeneralProjectedList, GeneralProjectedNoId } from "../types/generalProjected.types";
 import { v4 as uuidv4 } from 'uuid';
 import { logError } from "../utils/logger.utils";
+import budgetData from "./budget.model";
 
 class GeneralProjectedMonthList {
     static #instance: GeneralProjectedMonthList;
@@ -57,6 +58,7 @@ class GeneralProjectedMonthList {
         this.#projectedMonths[monthYear].items.push(genProj);
         this.#projectedMonths[monthYear].totalCost += Math.round(genProj.cost);
 
+        budgetData.recalculateBudget(genProj.month, genProj.year, this.#projectedMonths[monthYear]);
         setGeneralProjection(this.#projectedMonths);
     }
 

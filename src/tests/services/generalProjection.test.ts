@@ -4,7 +4,7 @@ import { clearAllData } from "../../services/common.services"
 import { addExpenseToList } from "../../services/generalProjection.service"
 
 describe('general projection', () => {
-    const testExpenses = [
+    const testExpenses:ExpenseData[] = [
         new ExpenseData({
             itemName: "Mobile",
             cost: 10000,
@@ -30,6 +30,10 @@ describe('general projection', () => {
             }
         })
     ]
+
+    beforeAll(() => {
+        clearAllData();
+    })
 
     afterEach(() => {
         clearAllData();
@@ -77,4 +81,6 @@ describe('general projection', () => {
         let actual = generalProjectedMonthList.getMonth(2, 2025);
         expect(actual).toMatchObject(expected);
     })
+
+    test('add add on expense for another month', () => {})
 })

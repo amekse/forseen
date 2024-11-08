@@ -1,12 +1,13 @@
 import { getBudgetList, setBudgetList } from "../services/localStoring.service";
 import { BudgetForMonth, BudgetForPeriod, BudgetList, BudgetWithAdjustment } from "../types/budget.type";
 import { Months } from "../types/common.types";
+import { GeneralProjectedForMonth } from "../types/generalProjected.types";
 import { logError } from "../utils/logger.utils";
 import generalProjectedMonthList from "./generalProjectedMonthList.model";
 
 class BudgetData {
     static #instance: BudgetData;
-    #budgetList:BudgetList = [];
+    #budgetList:BudgetList = {};
     private constructor() {}
 
     public static get instance(): BudgetData {
@@ -19,16 +20,16 @@ class BudgetData {
 
     addForMonth(data:BudgetForMonth) {
         const generalProjectionForMonth = generalProjectedMonthList.getMonth(data.month, data.year);
-        let extraAmount = data.amount - generalProjectionForMonth.totalCost;
-        let availableAdjustment = generalProjectionForMonth.totalCost - data.amount;
+        let extraAmount = generalProjectionForMonth.totalCost - data.amount;
+        let availableAdjustment = data.amount - generalProjectionForMonth.totalCost;
         let monthYear = (data.year*100)+data.month;
         this.#budgetList[monthYear] = {
             month: data.month,
             year: data.year,
             amount: data.amount,
-            extraAmount: extraAmount  > 0 ? extraAmount : 0,
+            extraAmount: extraAmount >= 0 ? extraAmount : 0,
             adjustAmount: 0,
-            availableAdjustment
+            availableAdjustment: availableAdjustment >= 0 ? availableAdjustment : 0
         };
         setBudgetList(this.#budgetList);
     }
@@ -39,18 +40,31 @@ class BudgetData {
 
         while (countMonthYear <= endMonthYear) {
             let month = countMonthYear%100;
-            let year = countMonthYear/100;
+            let year = Math.trunc(countMonthYear/100);
             const generalProjectionForMonth = generalProjectedMonthList.getMonth(month as Months, year);
-            let extraAmount = data.amount - generalProjectionForMonth.totalCost;
-            let availableAdjustment = generalProjectionForMonth.totalCost - data.amount;
+            let extraAmount = generalProjectionForMonth.totalCost - data.amount;
+            let availableAdjustment = data.amount - generalProjectionForMonth.totalCost;
             this.#budgetList[countMonthYear] = {
                 month: month as Months,
                 year,
                 amount: data.amount,
-                extraAmount: extraAmount  > 0 ? extraAmount : 0,
+                extraAmount: extraAmount >= 0 ? extraAmount : 0,
                 adjustAmount: 0,
-                availableAdjustment
+                availableAdjustment: availableAdjustment >= 0 ? availableAdjustment : 0
             }
+            countMonthYear += 1;
+        }
+    }
+
+    recalculateBudget(month: Months, year: number, generalProjectionForMonth: GeneralProjectedForMonth) {
+        const monthYear = (year*100)+month;
+        let data = this.getMonth(month, year);
+        let extraAmount = generalProjectionForMonth.totalCost - data.amount;
+        let availableAdjustment = data.amount - generalProjectionForMonth.totalCost;
+        this.#budgetList[monthYear] = {
+            ...this.getMonth(month, year),
+            extraAmount: extraAmount >= 0 ? extraAmount : 0,
+            availableAdjustment: availableAdjustment >= 0 ? availableAdjustment : 0
         }
     }
 
@@ -98,7 +112,7 @@ class BudgetData {
     }
 
     clearAll() {
-        this.#budgetList = [];
+        this.#budgetList = {};
         setBudgetList(this.#budgetList);
     }
 }
