@@ -1,4 +1,6 @@
-function logError(trackMessage: string, data: string[], error?: any) {
+import { ErrorMessages } from "../types/common.types";
+
+function logError(trackMessage: string, data: ErrorMessages, error?: any) {
     console.error(trackMessage, data, error);
 }
 

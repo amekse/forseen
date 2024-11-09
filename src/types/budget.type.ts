@@ -6,18 +6,11 @@ type BudgetForMonth = {
     amount: number,
 }
 
-type BudgetWithAdjustment = {
-    extraAmount: number,
-    adjustAmount: number,
-    availableAdjustment: number
-} & BudgetForMonth;
-
 type BudgetList = {
-    totalExtraCost: number,
-    [key:number] : BudgetWithAdjustment
+    [key:number] : BudgetForMonth
 }
 
-type BudgetForPeriod = {
+type AverageBudget = {
     startMonth: Months,
     endMonth: Months,
     startYear: number,
@@ -28,6 +21,5 @@ type BudgetForPeriod = {
 export type {
     BudgetForMonth,
     BudgetList,
-    BudgetWithAdjustment,
-    BudgetForPeriod
+    AverageBudget
 }

@@ -1,89 +1,52 @@
+import { setExpenseList } from "../services/localStoring.service";
 import { ErrorMessages } from "../types/common.types";
-import { ExpenseItem, ExpenseItemNoId } from "../types/expenseItem.type";
-import { v4 as uuidv4 } from 'uuid';
-import { logError } from "../utils/logger.utils";
+import { ExpenseItem, ExpensesList } from "../types/expenseItem.type";
 
 class ExpenseData {
-    #defaultData:ExpenseItem = {
-        uuid: `expdata-${uuidv4()}`,
-        itemName: "Unnamed Expense",
-        cost: 0,
-        saveDateStart: {
-            month: 1,
-            year: 2024
-        },
-        saveDateEnd: {
-            month: 1,
-            year: 2024
+    static #instance: ExpenseData;
+    #expenseList:ExpensesList = {
+        high: [],
+        medium: [],
+        low: []
+    };
+    private constructor() {}
+
+    public static get instance(): ExpenseData {
+        if (!ExpenseData.#instance) {
+            ExpenseData.#instance = new ExpenseData();
         }
+
+        return ExpenseData.#instance;
     }
-    #error: ErrorMessages = false;
 
-    constructor(data:ExpenseItemNoId) {
-        const errorList:string[] = [];
-        if (data.itemName.trim() !== '') {
-            this.#defaultData.itemName = data.itemName;
+    addExpense(expense:ExpenseItem): ErrorMessages {
+        if (expense.date === 'none' && expense.priority !== 'none') {
+            this.#expenseList[expense.priority].push(expense);
+            setExpenseList(this.#expenseList);
+            return false;
+        } else if (expense.date !== 'none' && expense.priority === 'none') {
+            const monthYear = (expense.date.year*100)+expense.date.month;
+            this.#expenseList[monthYear] = expense;
+            setExpenseList(this.#expenseList);
+            return false;
         } else {
-            errorList.push('Name not present');
-        }
-
-        if (data.cost > 0) {
-            this.#defaultData.cost = data.cost;
-        } else {
-            errorList.push('Cost cannot be 0')
-        }
-
-        const monthYearStart = (data.saveDateStart.year*100)+data.saveDateStart.month;
-        const monthYearEnd = (data.saveDateEnd.year*100)+data.saveDateEnd.month;
-        if (monthYearEnd > monthYearStart) {
-            this.#defaultData.saveDateStart = data.saveDateStart;
-            this.#defaultData.saveDateEnd = data.saveDateEnd;
-        } else {
-            errorList.push('End date must be greater than start date or year must be greater than 2024');
-        }
-        
-        if (errorList.length > 0) {
-            this.#error = errorList;
-            logError("Expense Data Constructor", this.#error);
+            return 'Expense can have either date or priority.';
         }
     }
 
-    set (data:ExpenseItemNoId):ExpenseItem {
-        const errorList:string[] = [];
-        if (data.itemName.trim() !== '') {
-            this.#defaultData.itemName = data.itemName;
-        } else {
-            errorList.push('Name not present');
-        }
-
-        if (data.cost > 0) {
-            this.#defaultData.cost = data.cost;
-        } else {
-            errorList.push('Cost cannot be 0')
-        }
-
-        const monthYearStart = (data.saveDateStart.year*100)+data.saveDateStart.month;
-        const monthYearEnd = (data.saveDateEnd.year*100)+data.saveDateEnd.month;
-        if (monthYearEnd > monthYearStart) {
-            this.#defaultData.saveDateStart = data.saveDateStart;
-            this.#defaultData.saveDateEnd = data.saveDateEnd;
-        } else {
-            errorList.push('End date must be greater than start date or year must be greater than 2024');
-        }
-        if (errorList.length > 0) {
-            this.#error = errorList;
-            logError("Expense Data Set", this.#error);
-        }
-        return this.#defaultData;
+    getExpensesList():ExpensesList {
+        return this.#expenseList;
     }
 
-    get ():ExpenseItem {
-        return this.#defaultData;
-    }
-
-    getError ():ErrorMessages {
-        return this.#error;
+    clearAll() {
+        this.#expenseList = {
+            'high': [],
+            'medium': [],
+            'low': []
+        };
+        setExpenseList(this.#expenseList);
     }
 }
 
-export default ExpenseData;
+const expenseData = ExpenseData.instance;
+export default expenseData;

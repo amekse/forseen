@@ -1,23 +1,24 @@
-import { Months } from "./common.types"
-
-type ExpenseItemNoId = {
-    itemName: string,
-    cost: number,
-    saveDateStart: {
-        month: Months,
-        year: number
-    },
-    saveDateEnd: {
-        month: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12,
-        year: number
-    }
-}
+import { Months, Priority } from "./common.types"
 
 type ExpenseItem = {
-    uuid: string,
-} & ExpenseItemNoId
+    itemName: string,
+    itemDescription: string | "",
+    cost: number,
+    date: {
+        month: Months,
+        year: number
+    } | 'none',
+    priority: Priority | 'none'
+}
+
+type ExpensesList = {
+    [key:number]: ExpenseItem,
+    'high': ExpenseItem[],
+    'medium': ExpenseItem[],
+    'low': ExpenseItem[]
+}
 
 export type {
-    ExpenseItemNoId,
-    ExpenseItem
+    ExpenseItem,
+    ExpensesList
 };

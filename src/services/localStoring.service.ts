@@ -1,18 +1,18 @@
 import { BudgetList } from "../types/budget.type";
-import { GeneralProjectedList } from "../types/generalProjected.types";
+import { ExpensesList } from "../types/expenseItem.type";
 import { logUntrackedError } from "../utils/logger.utils";
 
-function setGeneralProjection(data:GeneralProjectedList) {
-    localStorage.setItem('lastGenProj', JSON.stringify(data));
+function setExpenseList(data:ExpensesList) {
+    localStorage.setItem('lastExpList', JSON.stringify(data));
 }
 
-function getGeneralProjection():any {
+function getExpenseList():any {
     let jsonData:any = {};
-    let data = localStorage.getItem('lastGenProjection') ?? "{}";
+    let data = localStorage.getItem('lastExpList') ?? "{}";
     try {
         jsonData = JSON.parse(data);
     } catch (e:any) {
-        logUntrackedError('LocalStorage service general projection', e);
+        logUntrackedError('LocalStorage service expense list', e);
     }
     return jsonData;
 }
@@ -33,8 +33,8 @@ function getBudgetList():any {
 }
 
 export {
-    getGeneralProjection,
-    setGeneralProjection,
+    getExpenseList,
+    setExpenseList,
     getBudgetList,
     setBudgetList
 }
