@@ -1,7 +1,7 @@
 import { getBudgetList, setBudgetList } from "../services/localStoring.service";
 import { AverageBudget, BudgetForMonth, BudgetList } from "../types/budget.type";
 import { Months } from "../types/common.types";
-import { logError } from "../utils/logger.utils";
+import { logError } from "../services/logger.services";
 
 class BudgetData {
     static #instance: BudgetData;

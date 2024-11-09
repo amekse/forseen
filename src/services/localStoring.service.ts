@@ -1,6 +1,6 @@
 import { BudgetList } from "../types/budget.type";
-import { ExpensesList } from "../types/expenseItem.type";
-import { logUntrackedError } from "../utils/logger.utils";
+import { ExpensesList } from "../types/expense.type";
+import { logUntrackedError } from "./logger.services";
 
 function setExpenseList(data:ExpensesList) {
     localStorage.setItem('lastExpList', JSON.stringify(data));

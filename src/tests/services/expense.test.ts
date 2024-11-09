@@ -1,9 +1,19 @@
-import expenseData from "../../models/expenseData.model"
+import expenseData from "../../models/expense.model"
 import { clearAllData } from "../../services/common.services"
-import { ExpenseItem, ExpensesList } from "../../types/expenseItem.type"
+import { ExpenseItem, ExpenseReadList, ExpensesList } from "../../types/expense.type"
 
 describe('test expense add and read', () => {
     const testExpensesList:ExpenseItem[] = [
+        {
+            itemName: "Television",
+            itemDescription: "",
+            cost: 6000,
+            date: {
+                month: 1,
+                year: 2025
+            },
+            priority: 'none'
+        },
         {
             itemName: "Fridge",
             itemDescription: "",
@@ -19,15 +29,15 @@ describe('test expense add and read', () => {
             priority: 'medium'
         },
         {
-            itemName: "Television",
+            itemName: "Washer",
             itemDescription: "",
-            cost: 6000,
+            cost: 4000,
             date: {
                 month: 1,
                 year: 2025
             },
             priority: 'none'
-        },
+        }
     ]
 
     beforeAll(() => {
@@ -41,10 +51,11 @@ describe('test expense add and read', () => {
     })
 
     test('get expense full period', () => {
-        const expected:ExpensesList = {
-            202501: {
-                itemName: 'Television',
-                itemDescription: '',
+        const expected:ExpenseReadList = [
+            {
+                id: '',
+                itemName: "Television",
+                itemDescription: "",
                 cost: 6000,
                 date: {
                     month: 1,
@@ -52,28 +63,40 @@ describe('test expense add and read', () => {
                 },
                 priority: 'none'
             },
-            'high': [
-                {
-                    itemName: "Fridge",
-                    itemDescription: "",
-                    cost: 5000,
-                    date: 'none',
-                    priority: 'high'
-                }
-            ],
-            'medium': [
-                {
-                    itemName: "Mobile",
-                    itemDescription: "",
-                    cost: 2000,
-                    date: 'none',
-                    priority: 'medium'
-                }
-            ],
-            'low': []
-        }
+            {
+                id: '',
+                itemName: "Washer",
+                itemDescription: "",
+                cost: 4000,
+                date: {
+                    month: 1,
+                    year: 2025
+                },
+                priority: 'none'
+            },
+            {
+                id: '',
+                itemName: "Fridge",
+                itemDescription: "",
+                cost: 5000,
+                date: 'none',
+                priority: 'high'
+            },
+            {
+                id: '',
+                itemName: "Mobile",
+                itemDescription: "",
+                cost: 2000,
+                date: 'none',
+                priority: 'medium'
+            }
+        ]
 
         const actual = expenseData.getExpensesList();
+        for (let actCnt = 0; actCnt < actual.length; actCnt++) {
+            actual[actCnt].id = '';
+        }
+        console.log(actual)
         expect(actual).toEqual(expected);
     })
 })

@@ -11,14 +11,23 @@ type ExpenseItem = {
     priority: Priority | 'none'
 }
 
+type ExpenseItemI = {
+    id: string
+} & ExpenseItem
+
 type ExpensesList = {
-    [key:number]: ExpenseItem,
-    'high': ExpenseItem[],
-    'medium': ExpenseItem[],
-    'low': ExpenseItem[]
+    [key:number]: ExpenseItemI[],
+    'monthYears': Set<number>,
+    'high': ExpenseItemI[],
+    'medium': ExpenseItemI[],
+    'low': ExpenseItemI[]
 }
+
+type ExpenseReadList = ExpenseItemI[]
 
 export type {
     ExpenseItem,
-    ExpensesList
+    ExpenseItemI,
+    ExpensesList,
+    ExpenseReadList
 };
