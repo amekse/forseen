@@ -51,6 +51,10 @@ class BudgetData {
         return this.#budgetList;
     }
 
+    getBudgetMonthYears():number[] {
+        return Object.keys(this.#budgetList).sort().reduce((acc:number[], cur) => acc.concat(Number(cur)), []);
+    }
+
     getBudgetMonth(month:Months, year:number):BudgetForMonth {
         const monthYear = (year*100)+month;
         return this.#budgetList[monthYear];

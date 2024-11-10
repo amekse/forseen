@@ -1,14 +1,10 @@
-import { Months, Priority } from "./common.types"
+import { Priority } from "./common.types"
 
 type ExpenseItem = {
     itemName: string,
     itemDescription: string | "",
     cost: number,
-    date: {
-        month: Months,
-        year: number
-    } | 'none',
-    priority: Priority | 'none'
+    priority: Priority
 }
 
 type ExpenseItemI = {
@@ -16,8 +12,6 @@ type ExpenseItemI = {
 } & ExpenseItem
 
 type ExpensesList = {
-    [key:number]: ExpenseItemI[],
-    'monthYears': Set<number>,
     'high': ExpenseItemI[],
     'medium': ExpenseItemI[],
     'low': ExpenseItemI[]

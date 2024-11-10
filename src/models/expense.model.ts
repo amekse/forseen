@@ -1,5 +1,4 @@
 import { setExpenseList } from "../services/localStoring.service";
-import { ErrorMessages } from "../types/common.types";
 import { ExpenseItem, ExpenseItemI, ExpenseReadList, ExpensesList } from "../types/expense.type";
 import { v4 as uuid } from 'uuid';
 
@@ -8,8 +7,7 @@ class ExpenseData {
     #expenseList:ExpensesList = {
         high: [],
         medium: [],
-        low: [],
-        monthYears: new Set()
+        low: []
     };
     private constructor() {}
 
@@ -21,40 +19,19 @@ class ExpenseData {
         return ExpenseData.#instance;
     }
 
-    addExpense(expense:ExpenseItem): ErrorMessages {
+    addExpense(expense:ExpenseItem) {
         const expenseI: ExpenseItemI = {
             ...expense,
             id: uuid()
         }
-        if (expense.date === 'none' && expense.priority !== 'none') {
-            this.#expenseList[expense.priority].push(expenseI);
-            setExpenseList(this.#expenseList);
-            return false;
-        } else if (expense.date !== 'none' && expense.priority === 'none') {
-            const monthYear = (expense.date.year*100)+expense.date.month;
-            this.#expenseList.monthYears.add(monthYear);
-            if (this.#expenseList[monthYear]) {
-                this.#expenseList[monthYear].push(expenseI);
-            } else {
-                this.#expenseList[monthYear] = [expenseI];
-            }
-            setExpenseList(this.#expenseList);
-            return false;
-        } else {
-            return 'Expense can have either date or priority.';
-        }
+        this.#expenseList[expense.priority].push(expenseI);
+        setExpenseList(this.#expenseList);
     }
 
 
 
     getExpensesList():ExpenseReadList {
         let expenseList:ExpenseReadList = []
-        const sortedMonthYears = Array.from(this.#expenseList.monthYears).sort();
-        sortedMonthYears.forEach(monthYear => {
-            this.#expenseList[monthYear].forEach(exp => {
-                expenseList.push(exp);
-            })
-        })
         expenseList = expenseList.concat(this.#expenseList.high);
         expenseList = expenseList.concat(this.#expenseList.medium);
         expenseList = expenseList.concat(this.#expenseList.low);
@@ -65,8 +42,7 @@ class ExpenseData {
         this.#expenseList = {
             'high': [],
             'medium': [],
-            'low': [],
-            'monthYears': new Set()
+            'low': []
         };
         setExpenseList(this.#expenseList);
     }

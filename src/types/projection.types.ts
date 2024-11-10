@@ -1,13 +1,23 @@
-import { Months } from "./common.types"
+import { BudgetForMonth } from "./budget.type";
 
-type ProjectionItem = {
-    itemName: string,
-    itemCost: number,
-    month: Months,
-    year: number,
-    projectionIssue: string | null
+type ProjectionMonth = {
+    usedAmount: number,
+    expensesItem: string[]; // expense ids
+} & BudgetForMonth;
+
+type ProjectionList = {
+    monthYears: number[],
+    totalLeftOverBudget: number,
+    [key:number]: ProjectionMonth
+};
+
+type ProjectedData = {
+    errorList: string[],
+    projectionList: ProjectionList
 }
 
 export type {
-    ProjectionItem
+    ProjectionMonth,
+    ProjectionList,
+    ProjectedData
 }
