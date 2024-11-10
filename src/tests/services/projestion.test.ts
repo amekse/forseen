@@ -163,7 +163,6 @@ describe('test projection read', () => {
             })
         })
 
-        console.log('final output', JSON.stringify(actual));
         expect(actual).toEqual(expected);
     })
 })
