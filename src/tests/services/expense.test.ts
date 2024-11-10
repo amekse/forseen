@@ -63,7 +63,6 @@ describe('test expense add and read', () => {
         for (let actCnt = 0; actCnt < actual.length; actCnt++) {
             actual[actCnt].id = '';
         }
-        console.log(actual)
         expect(actual).toEqual(expected);
     })
 })
