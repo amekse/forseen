@@ -60,6 +60,10 @@ class BudgetData {
         return this.#budgetList[monthYear];
     }
 
+    getBudgetMonthById(monthYear:number):BudgetForMonth {
+        return this.#budgetList[monthYear];
+    }
+
     readFromLocalBudgetMonths():BudgetList {
         let data = getBudgetList();
         let savedProj:BudgetList = {};
