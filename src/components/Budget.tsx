@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, IconButton, MenuItem, Select, TextField, Typography, useTheme } from "@mui/material";
 import { AverageBudget, BudgetForMonth } from "../types/budget.type";
 import { Months } from "../types/common.types";
@@ -112,7 +112,7 @@ function Budget() {
 
     const chartXAxisData:string[] = useMemo(() => {
         const monthYears = budgetData.getBudgetMonthYears();
-        let xAxisData:string[] = [];
+        let xAxisData:string[] = [''];
         monthYears.forEach(monthYear => {
             let month = monthYear%100;
             let year = Math.trunc(monthYear/100);
@@ -122,7 +122,7 @@ function Budget() {
     }, [saveTriggered])
 
     const chartBarData:{data: number[]}[] = useMemo(() => {
-        let chartData:number[]= []
+        let chartData:number[]= [0]
         const monthYears = budgetData.getBudgetMonthYears();
         monthYears.forEach(monthYear => {
             let budgetForMonth = budgetData.getBudgetMonthById(monthYear);
@@ -139,6 +139,10 @@ function Budget() {
         return tempList;
     }, [saveTriggered])
 
+    useEffect(() => {
+        triggerSave(Date.now());
+    },[])
+
     return (
         <div className="budgetContent">
             <div className="budgetLeftContainer">
@@ -149,7 +153,7 @@ function Budget() {
                             <Typography variant="subtitle1" color="textPrimary">Month & Year : </Typography>
                             <Select value={monthBudget.month} onChange={e => handleMonthBudgetChange(e.target.value as Months, FormKeys.month)}>
                                 {
-                                    monthsList.map(cMth => <MenuItem value={cMth}>{cMth}</MenuItem>)
+                                    monthsList.map(cMth => <MenuItem value={cMth}>{cMth} {`(${monthsNameList[cMth-1]})`}</MenuItem>)
                                 }
                             </Select>
                             <Select value={monthBudget.year} onChange={e => handleMonthBudgetChange(e.target.value as number, FormKeys.year)}>
@@ -174,7 +178,7 @@ function Budget() {
                             <Typography variant="subtitle1" color="textPrimary">Start Month & Year : </Typography>
                             <Select value={averageBudget.startMonth} onChange={e => handleAverageBudgetChange(e.target.value as Months, FormKeys.startMonth)}>
                                 {
-                                    monthsList.map(cMth => <MenuItem value={cMth}>{cMth}</MenuItem>)
+                                    monthsList.map(cMth => <MenuItem value={cMth}>{cMth} {`(${monthsNameList[cMth-1]})`}</MenuItem>)
                                 }
                             </Select>
                             <Select value={averageBudget.startYear} onChange={e => handleAverageBudgetChange(e.target.value as number, FormKeys.startYear)}>
@@ -187,7 +191,7 @@ function Budget() {
                             <Typography variant="subtitle1" color="textPrimary">End Month & Year : </Typography>
                             <Select value={averageBudget.endMonth} onChange={e => handleAverageBudgetChange(e.target.value as Months, FormKeys.endMonth)}>
                                 {
-                                    monthsList.map(cMth => <MenuItem value={cMth}>{cMth}</MenuItem>)
+                                    monthsList.map(cMth => <MenuItem value={cMth}>{cMth} {`(${monthsNameList[cMth-1]})`}</MenuItem>)
                                 }
                             </Select>
                             <Select value={averageBudget.endYear} onChange={e => handleAverageBudgetChange(e.target.value as number, FormKeys.endYear)}>
@@ -207,27 +211,31 @@ function Budget() {
                         </div>
                     </div>
                 </div>
-                <div className="budgetLeftBottom ">
+                <div className="budgetLeftBottom">
+                    <Typography variant="h6" color="primary" fontWeight={800}>Budget Trend:</Typography>
                     <LineChart 
                         xAxis={[{scaleType: 'band', data: chartXAxisData}]}
                         series={chartBarData}
                     />
                 </div>
             </div>
-            <div className="budgetContainerRight">
-                {
-                    budgetList.map(showData => {
-                        return (
-                            <div className="budgetListCard">
-                                <div className="budgetListCardData">
-                                    <Typography variant="subtitle1" color="primary">Month: {monthsNameList[showData.month]}, {showData.year}</Typography>
-                                    <Typography variant="subtitle1" color="textPrimary">Amount: {showData.amount}</Typography>
+            <div className="budgetContainerRightWrap">
+                <Typography variant="h6" color="primary" fontWeight={800}>Present Budget:</Typography>
+                <div className="budgetContainerRight">
+                    {
+                        budgetList.map(showData => {
+                            return (
+                                <div className="budgetListCard" key={`${showData.month}${showData.year}`}>
+                                    <div className="budgetListCardData">
+                                        <Typography variant="subtitle1" color="primary">Month: {monthsNameList[showData.month-1]}, {showData.year}</Typography>
+                                        <Typography variant="subtitle1" color="textPrimary">Amount: {showData.amount}</Typography>
+                                    </div>
+                                    <IconButton color="error"><DeleteOutline /></IconButton>
                                 </div>
-                                <IconButton color="error"><DeleteOutline /></IconButton>
-                            </div>
-                        )
-                    })
-                }
+                            )
+                        })
+                    }
+                </div>
             </div>
         </div>
     )

@@ -17,7 +17,7 @@ function App() {
         main: '#a6c8d3',
         dark: '#83a1aa',
         light: '#c7e1e8',
-        contrastText: '#f5f5f5',
+        contrastText: '#0e6682',
       },
       success: {
         main: '#087e8b',

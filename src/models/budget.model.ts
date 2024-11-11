@@ -5,7 +5,8 @@ import { logError } from "../services/logger.services";
 
 class BudgetData {
     static #instance: BudgetData;
-    #budgetList:BudgetList = {};
+    #budgetList:BudgetList = this.readFromLocalBudgetMonths();
+    
     private constructor() {}
 
     public static get instance(): BudgetData {
@@ -68,10 +69,10 @@ class BudgetData {
         let data = getBudgetList();
         let savedProj:BudgetList = {};
         Object.keys(data).forEach(gpKey => {
-            if (typeof gpKey === "number") {
+            if (typeof gpKey === "string") {
                 let innerData = data[gpKey];
                 if (innerData.hasOwnProperty('amount') && typeof innerData.amount === "number" && innerData.hasOwnProperty('month') && typeof innerData.month === "number" && innerData.hasOwnProperty('year') && typeof innerData.year === "number")  {
-                    savedProj[gpKey] = innerData;
+                    savedProj[Number(gpKey)] = innerData;
                 } else {
                     logError("BudgetData readFromLocalBudgetMonths BudgetForMonth", 'Inner data missing', innerData);
                 }

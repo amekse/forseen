@@ -88,22 +88,34 @@ input[type=number] {
     justify-content: space-between;
 }
 
-.budgetContainerRight {
+.budgetContainerRightWrap {
     width: 30%;
     height: 100%;
 
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.budgetContainerRight {
+    width: 100%;
+    max-height: 80vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     gap: 8px;
+
     overflow-y: auto;
     overflow-x: hidden;
 }
 
 .budgetLeftTop {
     width: 100%;
-    height: 50%;
+    height: 45%;
 
     display: flex;
     flex-direction: row;
@@ -114,7 +126,10 @@ input[type=number] {
 
 .budgetLeftBottom {
     width: 100%;
-    height: 45%;
+    height: 48%;
+
+    overflow: hidden;
+    padding-bottom: 24px;
 }
 
 .budgetEntryCard {
