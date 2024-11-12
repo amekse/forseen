@@ -167,7 +167,7 @@ function Budget() {
                             <TextField value={monthBudget.amount} variant="standard" onChange={e => handleMonthBudgetChange(Number(e.target.value), FormKeys.amount)} />
                         </div>
                         <Typography variant="body2" color="error">{inputError.monthBudget}</Typography>
-                        <div className="budgetEntryActions">
+                        <div className="cardEntryActions">
                             <Button onClick={_ => clearData('average')}>Clear</Button>
                             <Button onClick={_ => handleSave('month')}>Save</Button>
                         </div>
