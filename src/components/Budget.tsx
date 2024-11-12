@@ -147,18 +147,18 @@ function Budget() {
         <div className="budgetContent">
             <div className="budgetLeftContainer">
                 <div className="budgetLeftTop">
-                    <div className="budgetEntryCard">
+                    <div className="budgetEntryCard" key="budgetEntryCardMonth">
                         <Typography variant="h6" color="primary" fontWeight={800}>Add Month's Budget</Typography>
                         <div className="inputRow">
                             <Typography variant="subtitle1" color="textPrimary">Month & Year : </Typography>
                             <Select value={monthBudget.month} onChange={e => handleMonthBudgetChange(e.target.value as Months, FormKeys.month)}>
                                 {
-                                    monthsList.map(cMth => <MenuItem value={cMth}>{cMth} {`(${monthsNameList[cMth-1]})`}</MenuItem>)
+                                    monthsList.map(cMth => <MenuItem key={`${monthsNameList[cMth-1]}`} value={cMth}>{cMth} {`(${monthsNameList[cMth-1]})`}</MenuItem>)
                                 }
                             </Select>
                             <Select value={monthBudget.year} onChange={e => handleMonthBudgetChange(e.target.value as number, FormKeys.year)}>
                                 {
-                                    yearsList.map(cYr => <MenuItem value={cYr}>{cYr}</MenuItem>)
+                                    yearsList.map(cYr => <MenuItem key={`monthbudget-${cYr}`} value={cYr}>{cYr}</MenuItem>)
                                 }
                             </Select>
                         </div>
@@ -172,18 +172,18 @@ function Budget() {
                             <Button onClick={_ => handleSave('month')}>Save</Button>
                         </div>
                     </div>
-                    <div className="budgetEntryCard">
+                    <div className="budgetEntryCard" key="budgetEntryCardAverage">
                         <Typography variant="h6" color="primary" fontWeight={800}>Add Average Budget</Typography>
                         <div className="inputRow">
                             <Typography variant="subtitle1" color="textPrimary">Start Month & Year : </Typography>
                             <Select value={averageBudget.startMonth} onChange={e => handleAverageBudgetChange(e.target.value as Months, FormKeys.startMonth)}>
                                 {
-                                    monthsList.map(cMth => <MenuItem value={cMth}>{cMth} {`(${monthsNameList[cMth-1]})`}</MenuItem>)
+                                    monthsList.map(cMth => <MenuItem key={`avgstartmnth${monthsNameList[cMth-1]}`} value={cMth}>{cMth} {`(${monthsNameList[cMth-1]})`}</MenuItem>)
                                 }
                             </Select>
                             <Select value={averageBudget.startYear} onChange={e => handleAverageBudgetChange(e.target.value as number, FormKeys.startYear)}>
                                 {
-                                    yearsList.map(cYr => <MenuItem value={cYr}>{cYr}</MenuItem>)
+                                    yearsList.map(cYr => <MenuItem key={`avgstart${cYr}`} value={cYr}>{cYr}</MenuItem>)
                                 }
                             </Select>
                         </div>
@@ -191,12 +191,12 @@ function Budget() {
                             <Typography variant="subtitle1" color="textPrimary">End Month & Year : </Typography>
                             <Select value={averageBudget.endMonth} onChange={e => handleAverageBudgetChange(e.target.value as Months, FormKeys.endMonth)}>
                                 {
-                                    monthsList.map(cMth => <MenuItem value={cMth}>{cMth} {`(${monthsNameList[cMth-1]})`}</MenuItem>)
+                                    monthsList.map(cMth => <MenuItem key={`avgendmnth${monthsNameList[cMth-1]}`} value={cMth}>{cMth} {`(${monthsNameList[cMth-1]})`}</MenuItem>)
                                 }
                             </Select>
                             <Select value={averageBudget.endYear} onChange={e => handleAverageBudgetChange(e.target.value as number, FormKeys.endYear)}>
                                 {
-                                    yearsList.map(cYr => <MenuItem value={cYr}>{cYr}</MenuItem>)
+                                    yearsList.map(cYr => <MenuItem key={`avgendyr${cYr}`} value={cYr}>{cYr}</MenuItem>)
                                 }
                             </Select>
                         </div>
