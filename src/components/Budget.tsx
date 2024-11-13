@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Button, IconButton, MenuItem, Select, TextField, Typography, useTheme } from "@mui/material";
 import { AverageBudget, BudgetForMonth } from "../types/budget.type";
 import { Months } from "../types/common.types";
 import budgetData from "../models/budget.model";
 import { LineChart } from '@mui/x-charts';
 import { DeleteOutline } from "@mui/icons-material";
+import { DataCleared } from "../common.contexts";
 
 enum FormKeys {
     month = 'month',
@@ -142,6 +143,13 @@ function Budget() {
     useEffect(() => {
         triggerSave(Date.now());
     },[])
+
+    const dataClearedContext = useContext(DataCleared);
+    useEffect(() => {
+        if (dataClearedContext > 0) {
+            triggerSave(Date.now());
+        }
+    }, [dataClearedContext])
 
     return (
         <div className="budgetContent">

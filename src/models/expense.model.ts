@@ -1,14 +1,11 @@
-import { setExpenseList } from "../services/localStoring.service";
+import { getExpenseList, setExpenseList } from "../services/localStoring.service";
+import { logError } from "../services/logger.services";
 import { ExpenseItem, ExpenseItemI, ExpenseReadList, ExpensesList } from "../types/expense.type";
 import { v4 as uuid } from 'uuid';
 
 class ExpenseData {
     static #instance: ExpenseData;
-    #expenseList:ExpensesList = {
-        high: [],
-        medium: [],
-        low: []
-    };
+    #expenseList:ExpensesList = this.readFromLocalExpense();
     private constructor() {}
 
     public static get instance(): ExpenseData {
@@ -28,7 +25,23 @@ class ExpenseData {
         setExpenseList(this.#expenseList);
     }
 
-
+    readFromLocalExpense():ExpensesList {
+        let data = getExpenseList();
+        let savedProj:ExpensesList = {
+            high: [],
+            medium: [],
+            low: []
+        };
+        Object.keys(data).forEach(xpKey => {
+            switch (xpKey) {
+                case 'high': savedProj.high = data.high; break;
+                case 'medium': savedProj.medium = data.medium; break;
+                case 'low': savedProj.low = data.low; break;
+                default: logError("ExpenseData readFromLocalExpense BudgetList", 'list bad keys', xpKey);
+            }
+        });
+        return savedProj;
+    }
 
     getExpensesList():ExpenseReadList {
         let expenseList:ExpenseReadList = []
@@ -36,6 +49,10 @@ class ExpenseData {
         expenseList = expenseList.concat(this.#expenseList.medium);
         expenseList = expenseList.concat(this.#expenseList.low);
         return expenseList;
+    }
+
+    getExpenseCategoryList():ExpensesList {
+        return this.#expenseList;
     }
 
     clearAll() {
