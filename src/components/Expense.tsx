@@ -5,6 +5,7 @@ import { ExpenseItem } from "../types/expense.type";
 import expenseData from "../models/expense.model";
 import { DataCleared } from "../common.contexts";
 import { PieChart } from "@mui/x-charts";
+import { ShoppingCartOutlined } from "@mui/icons-material";
 
 enum FormKeys {
     itemName = 'itemName',
@@ -198,22 +199,30 @@ function Expense() {
                             <Typography variant="h6" color="primary" fontWeight={800} className="expenseListHeading">Low:</Typography>
                             <div className="expenseList">
                                 {
-                                    expenseShowData.low.map(lowItem =>
-                                        <div className="expenseDataCard" key={lowItem.id}>
-                                            <div className="inputRow">
-                                                <Typography variant="subtitle1" color="primary">Item Name:</Typography>
-                                                <Typography variant="subtitle1" color="primary" fontWeight={800}>{lowItem.itemName}</Typography>
-                                            </div>
-                                            <div className="inputRow">
-                                                <Typography variant="subtitle1" color="textPrimary">Cost:</Typography>
-                                                <Typography variant="subtitle1" color="textPrimary">{lowItem.cost}</Typography>
-                                            </div>
-                                            <div className="inputRow">
-                                                <Typography variant="subtitle1" color="textPrimary">Priority:</Typography>
-                                                <Typography variant="subtitle1" color="textPrimary">{lowItem.priority.toUpperCase()}</Typography>
-                                            </div>
-                                        </div>
-                                    )
+                                    expenseShowData.low.length > 0 ?
+                                    <div className="expenseList">
+                                        {
+                                            expenseShowData.low.map(lowItem =>
+                                                <div className="expenseDataCard" key={lowItem.id}>
+                                                    <div className="inputRow">
+                                                        <Typography variant="subtitle1" color="primary">Item Name:</Typography>
+                                                        <Typography variant="subtitle1" color="primary" fontWeight={800}>{lowItem.itemName}</Typography>
+                                                    </div>
+                                                    <div className="inputRow">
+                                                        <Typography variant="subtitle1" color="textPrimary">Cost:</Typography>
+                                                        <Typography variant="subtitle1" color="textPrimary">{lowItem.cost}</Typography>
+                                                    </div>
+                                                    <div className="inputRow">
+                                                        <Typography variant="subtitle1" color="textPrimary">Priority:</Typography>
+                                                        <Typography variant="subtitle1" color="textPrimary">{lowItem.priority.toUpperCase()}</Typography>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    </div> :
+                                    <div className="emptyList">
+                                        <ShoppingCartOutlined style={{ fontSize: '50px' }} />
+                                    </div>
                                 }
                             </div>
                         </div>
