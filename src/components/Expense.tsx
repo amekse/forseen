@@ -151,49 +151,63 @@ function Expense() {
                     <div className="expenseContainerRightBottom">
                         <div className="expenseListWrapper">
                             <Typography variant="h6" color="primary" fontWeight={800} className="expenseListHeading">High:</Typography>
-                            <div className="expenseList">
-                                {
-                                    expenseShowData.high.map(highItem =>
-                                        <div className="expenseDataCard" key={highItem.id}>
-                                            <div className="inputRow">
-                                                <Typography variant="subtitle1" color="primary">Item Name:</Typography>
-                                                <Typography variant="subtitle1" color="primary" fontWeight={800}>{highItem.itemName}</Typography>
+                            {
+                                expenseShowData.high.length > 0 ?
+                                <div className="expenseList">
+                                    {
+                                        expenseShowData.high.map(highItem =>
+                                            <div className="expenseDataCard" key={highItem.id}>
+                                                <div className="inputRow">
+                                                    <Typography variant="subtitle1" color="primary">Item Name:</Typography>
+                                                    <Typography variant="subtitle1" color="primary" fontWeight={800}>{highItem.itemName}</Typography>
+                                                </div>
+                                                <div className="inputRow">
+                                                    <Typography variant="subtitle1" color="textPrimary">Cost:</Typography>
+                                                    <Typography variant="subtitle1" color="textPrimary">{highItem.cost}</Typography>
+                                                </div>
+                                                <div className="inputRow">
+                                                    <Typography variant="subtitle1" color="textPrimary">Priority:</Typography>
+                                                    <Typography variant="subtitle1" color="textPrimary">{highItem.priority.toUpperCase()}</Typography>
+                                                </div>
                                             </div>
-                                            <div className="inputRow">
-                                                <Typography variant="subtitle1" color="textPrimary">Cost:</Typography>
-                                                <Typography variant="subtitle1" color="textPrimary">{highItem.cost}</Typography>
-                                            </div>
-                                            <div className="inputRow">
-                                                <Typography variant="subtitle1" color="textPrimary">Priority:</Typography>
-                                                <Typography variant="subtitle1" color="textPrimary">{highItem.priority.toUpperCase()}</Typography>
-                                            </div>
-                                        </div>
-                                    )
-                                }
-                            </div>
+                                        )
+                                    }
+                                </div> : 
+                                <div className="emptyList">
+                                    <ShoppingCartOutlined style={{ fontSize: '32px', color: '#b8b8b8' }} />
+                                    <Typography variant="body1" color="textSecondary">No expense data</Typography>
+                                </div>
+                            }
                         </div>
                         <div className="expenseListWrapper">
                             <Typography variant="h6" color="primary" fontWeight={800} className="expenseListHeading">Medium:</Typography>
-                            <div className="expenseList">
-                                {
-                                    expenseShowData.medium.map(mediumItem =>
-                                        <div className="expenseDataCard" key={mediumItem.id}>
-                                            <div className="inputRow">
-                                                <Typography variant="subtitle1" color="primary">Item Name:</Typography>
-                                                <Typography variant="subtitle1" color="primary" fontWeight={800}>{mediumItem.itemName}</Typography>
+                            {
+                                expenseShowData.medium.length > 0 ?
+                                <div className="expenseList">
+                                    {
+                                        expenseShowData.medium.map(mediumItem =>
+                                            <div className="expenseDataCard" key={mediumItem.id}>
+                                                <div className="inputRow">
+                                                    <Typography variant="subtitle1" color="primary">Item Name:</Typography>
+                                                    <Typography variant="subtitle1" color="primary" fontWeight={800}>{mediumItem.itemName}</Typography>
+                                                </div>
+                                                <div className="inputRow">
+                                                    <Typography variant="subtitle1" color="textPrimary">Cost:</Typography>
+                                                    <Typography variant="subtitle1" color="textPrimary">{mediumItem.cost}</Typography>
+                                                </div>
+                                                <div className="inputRow">
+                                                    <Typography variant="subtitle1" color="textPrimary">Priority:</Typography>
+                                                    <Typography variant="subtitle1" color="textPrimary">{mediumItem.priority.toUpperCase()}</Typography>
+                                                </div>
                                             </div>
-                                            <div className="inputRow">
-                                                <Typography variant="subtitle1" color="textPrimary">Cost:</Typography>
-                                                <Typography variant="subtitle1" color="textPrimary">{mediumItem.cost}</Typography>
-                                            </div>
-                                            <div className="inputRow">
-                                                <Typography variant="subtitle1" color="textPrimary">Priority:</Typography>
-                                                <Typography variant="subtitle1" color="textPrimary">{mediumItem.priority.toUpperCase()}</Typography>
-                                            </div>
-                                        </div>
-                                    )
-                                }
-                            </div>
+                                        )
+                                    }
+                                </div> :
+                                <div className="emptyList">
+                                    <ShoppingCartOutlined style={{ fontSize: '32px', color: '#b8b8b8' }} />
+                                    <Typography variant="body1" color="textSecondary">No expense data</Typography>
+                                </div>
+                            }
                         </div>
                         <div className="expenseListWrapper">
                             <Typography variant="h6" color="primary" fontWeight={800} className="expenseListHeading">Low:</Typography>
@@ -221,7 +235,8 @@ function Expense() {
                                         }
                                     </div> :
                                     <div className="emptyList">
-                                        <ShoppingCartOutlined style={{ fontSize: '50px' }} />
+                                        <ShoppingCartOutlined style={{ fontSize: '32px', color: '#b8b8b8' }} />
+                                        <Typography variant="body1" color="textSecondary">No expense data</Typography>
                                     </div>
                                 }
                             </div>

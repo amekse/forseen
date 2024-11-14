@@ -4,7 +4,7 @@ import { AverageBudget, BudgetForMonth } from "../types/budget.type";
 import { Months } from "../types/common.types";
 import budgetData from "../models/budget.model";
 import { LineChart } from '@mui/x-charts';
-import { DeleteOutline } from "@mui/icons-material";
+import { DeleteOutline, SavingsOutlined } from "@mui/icons-material";
 import { DataCleared } from "../common.contexts";
 
 enum FormKeys {
@@ -229,21 +229,28 @@ function Budget() {
             </div>
             <div className="budgetContainerRightWrap">
                 <Typography variant="h6" color="primary" fontWeight={800}>Present Budget:</Typography>
-                <div className="budgetContainerRight">
-                    {
-                        budgetList.map(showData => {
-                            return (
-                                <div className="budgetListCard" key={`${showData.month}${showData.year}`}>
-                                    <div className="budgetListCardData">
-                                        <Typography variant="subtitle1" color="primary">Month: {monthsNameList[showData.month-1]}, {showData.year}</Typography>
-                                        <Typography variant="subtitle1" color="textPrimary">Amount: {showData.amount}</Typography>
+                {
+                    budgetList.length > 0 ?
+                    <div className="budgetContainerRight">
+                        {
+                            budgetList.map(showData => {
+                                return (
+                                    <div className="budgetListCard" key={`${showData.month}${showData.year}`}>
+                                        <div className="budgetListCardData">
+                                            <Typography variant="subtitle1" color="primary">Month: {monthsNameList[showData.month-1]}, {showData.year}</Typography>
+                                            <Typography variant="subtitle1" color="textPrimary">Amount: {showData.amount}</Typography>
+                                        </div>
+                                        <IconButton color="error"><DeleteOutline /></IconButton>
                                     </div>
-                                    <IconButton color="error"><DeleteOutline /></IconButton>
-                                </div>
-                            )
-                        })
-                    }
-                </div>
+                                )
+                            })
+                        }
+                    </div> :
+                    <div className="emptyList">
+                        <SavingsOutlined style={{ fontSize: '32px', color: '#b8b8b8' }} />
+                        <Typography variant="body1" color="textSecondary">No budget data</Typography>
+                    </div>
+                }
             </div>
         </div>
     )
