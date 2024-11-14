@@ -1,5 +1,6 @@
+import { Months } from "../types/common.types";
 import { ExpenseItemI } from "../types/expense.type";
-import { ProjectedDetails, ProjectionList } from "../types/projection.types";
+import { ExpenseItemIWithProjectedMonth, ProjectedDetails, ProjectionList } from "../types/projection.types";
 import budgetData from "./budget.model";
 import expenseData from "./expense.model";
 
@@ -17,16 +18,16 @@ class ProjectionData {
             this.#projectionsList[monthYear] = {
                 ...budgetList[monthYear],
                 usedAmount: 0,
-                expensesItem: []
+                expensesItem: [],
             }
             this.#projectionsList.totalLeftOverBudget += budgetList[monthYear].amount;
         })
     }
 
-    #calculateMonthsNeededForExpense(expense:ExpenseItemI, errorList:string[]):string[] {
+    #calculateMonthsNeededForExpense(expense:ExpenseItemI, failedProjections:ExpenseItemI[], successfulProjections:ExpenseItemIWithProjectedMonth[]):{failed: ExpenseItemI[], successful: ExpenseItemIWithProjectedMonth[]} {
         let leftoverCost = expense.cost;
         if (leftoverCost > this.#projectionsList.totalLeftOverBudget) {
-            errorList.push(`Not enough budget for ${expense.itemName}, please add more budget to cover the amount ${leftoverCost - this.#projectionsList.totalLeftOverBudget}`);
+            failedProjections.push(expense);
         } else {
             for(let curMthYr = 0; leftoverCost > 100 && curMthYr < this.#projectionsList.monthYears.length; curMthYr++) {
                 let projectionMonth = this.#projectionsList[this.#projectionsList.monthYears[curMthYr]];
@@ -40,24 +41,36 @@ class ProjectionData {
                         leftoverCost -= projectionMonth.amount;
                         projectionMonth.amount = 0;
                     }
+                    if (leftoverCost <= 100) {
+                        successfulProjections.push({
+                            ...expense,
+                            projectedMonth: projectionMonth.month,
+                            projectedYear: projectionMonth.year
+                        })
+                    }
                     projectionMonth.expensesItem.push(expense);
                     this.#projectionsList[this.#projectionsList.monthYears[curMthYr]] = projectionMonth;
                     this.#projectionsList.totalLeftOverBudget -= projectionMonth.usedAmount;
                 }
             }
         }
-        return errorList;
+        return {
+            failed: failedProjections,
+            successful: successfulProjections
+        };
     }
 
     projectForAll():ProjectedDetails {
-        let errorList:string[] = [];
+        let failedProjections:ExpenseItemI[] = [];
+        let successfulProjections:ExpenseItemIWithProjectedMonth[] = [];
         const expenseList = expenseData.getExpensesList();
         expenseList.forEach(expense => {
-            this.#calculateMonthsNeededForExpense(expense, errorList);
+            this.#calculateMonthsNeededForExpense(expense, failedProjections, successfulProjections);
         })
         return {
-            errorList,
-            projectionList: this.#projectionsList
+            failedProjections,
+            projectionList: this.#projectionsList,
+            successfulProjections
         }
     }
 }

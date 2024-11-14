@@ -334,3 +334,89 @@ input[type=number] {
     justify-content: center;
     align-items: center;
 }
+
+.projectionContent {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.projectionQuickInfoSection {
+    width: 100%;
+    height: 20%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.projectionBreakDown {
+    width: 100%;
+    height: 80%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.projectedListWrap, .projectedCategoryGraphs {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.projectedCategoryGraphs {
+    gap: 16px;
+    height: 95%;
+}
+
+.projectedList {
+    width: 100%;
+    height: 60vh;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+    gap: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #087e8b;
+}
+
+.projectedQuickInfoTab {
+    width: 100%;
+    height: 80%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+}
+
+.projectedCategoryDistribution {
+    width: 100%;
+    height: 100%;
+
+    background-color: #087e8b;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+}
