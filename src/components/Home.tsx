@@ -29,13 +29,15 @@ function Home() {
         showClearAllSnackbar(true);
     }
 
+    const handleShowGuide = () => window.open(`${window.location.origin}/guide.html`);
+
     return (
         <DataCleared.Provider value={clearData}>
             <div className="home">
                 <div className="heading">
                     <Typography variant="h5" color="textPrimary">Foresee</Typography>
                     <div className="quickLinks">
-                        <Button color="primary" variant="contained" startIcon={<QuestionMark />}>Guide</Button>
+                        <Button color="primary" variant="contained" startIcon={<QuestionMark />} onClick={handleShowGuide}>Guide</Button>
                         <Button color="primary" variant="contained" startIcon={<EmojiPeople />}>About Us</Button>
                         <Button color="primary" variant="contained" startIcon={<Policy />}>Policies</Button>
                         <Button color="error" variant="contained" startIcon={<DeleteForever />} onClick={handleClearMemory}>Clear Memory</Button>
