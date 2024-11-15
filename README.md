@@ -1,46 +1,42 @@
-# Getting Started with Create React App
+# Guide to Foresee
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Add Budget
+You can add a budget for specific months or for a range of months with the same amount.
 
-## Available Scripts
+- For a Single Month:
+  1. Go to the Budgets tab.
+  2. In the Add Month's Budget section, select the month and year.
+  3. Enter the budget amount.
+  4. Click Save to add it to the budget list.
 
-In the project directory, you can run:
+- For a Range of Months:
+  1. Go to the Budgets tab.
+  2. In the Add Average Budget section, select the start and end months and years.
+  3. Enter the budget amount for each month in the range.
+  4. Click Save to apply the same budget to all selected months.
 
-### `npm start`
+You can view the Budget Trend graph below, which shows the monthly budget trend over time.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Add Expense
+You can categorize expenses by priority levels: High, Medium, and Low.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Go to the Expenses tab.
+2. In the Add Expense section:
+   - Enter the item name.
+   - Select the priority (High, Medium, or Low).
+   - Enter the amount for the expense.
+3. Click Save to add the expense to the list.
 
-### `npm test`
+The expenses will be displayed by priority level, and you can also see a breakdown in the Expense Distribution chart.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## View Projection
+The Projection tab provides an overview of how your budget aligns with your expenses.
 
-### `npm run build`
+- Leftover Budget: Shows the remaining budget after feasible expenses.
+- Budget Shortage: Indicates the shortfall for items that exceed the *Leftover* budget.
+- Feasible Items: Lists items that can be purchased within the current budget.
+- Unattainable Items: Lists items that exceed the budget.
+- Conversion Rate: Shows the percentage of items that fit within the budget.
+- Category Distribution: Displays pie charts for feasible and unattainable items.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+This section helps you understand if you need to adjust your budget or expenses based on the feasibility of purchases.
