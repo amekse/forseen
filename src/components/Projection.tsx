@@ -2,15 +2,19 @@ import React, { useContext, useEffect, useState } from "react";
 import ProjectionData from "../models/projection.model";
 import { ExpenseItemI } from "../types/expense.type";
 import { DataCleared } from "../common.contexts";
-import { Typography, useTheme } from "@mui/material";
-import { Gauge } from "@mui/x-charts";
+import { Typography } from "@mui/material";
+import { Gauge, PieChart } from "@mui/x-charts";
+
+type PieData = {label:string,value:number}[]
 
 type ShowData = {
     successfulExpense: ExpenseItemI[],
     failedExpense: ExpenseItemI[],
     leftOverflow: number,
     totalShortage: number,
-    feasiblePercentage: number
+    feasiblePercentage: number,
+    pieDataSuccess: PieData,
+    pieDataFail: PieData
 }
 
 function Projection() {
@@ -19,12 +23,39 @@ function Projection() {
         failedExpense: [],
         leftOverflow: 0,
         totalShortage: 0,
-        feasiblePercentage: 0
+        feasiblePercentage: 0,
+        pieDataFail: [],
+        pieDataSuccess: []
     });
+
+    const calculatePieDistribution = (itemsList: ExpenseItemI[]):PieData => {
+        let highCount = 0, mediumCount = 0, lowCount = 0;
+        itemsList.forEach(item => {
+            switch(item.priority) {
+                case "high": highCount += 1; break;
+                case "medium": mediumCount += 1; break;
+                case "low": lowCount += 1; break;
+            }
+        });
+        const totalCount = highCount + mediumCount + lowCount;
+        return [
+            {
+                label: 'High',
+                value: Math.round((highCount/totalCount)*100)
+            },
+            {
+                label: 'Medium',
+                value: Math.round((mediumCount/totalCount)*100)
+            },
+            {
+                label: 'Low',
+                value: Math.round((lowCount/totalCount)*100)
+            }
+        ]
+    }
 
     const readyDisplayData = () => {
         const projectionData = (new ProjectionData()).projectForAll();
-        console.log(projectionData.failedProjections.reduce((acc:number, cur) => acc += cur.cost, 0) )
         setShowData(prev => (
             {
                 ...prev,
@@ -32,7 +63,9 @@ function Projection() {
                 failedExpense: projectionData.failedProjections,
                 leftOverflow: projectionData.projectionList.totalLeftOverBudget,
                 totalShortage: projectionData.failedProjections.reduce((acc:number, cur) => acc += cur.cost, 0) - projectionData.projectionList.totalLeftOverBudget,
-                feasiblePercentage: Math.round((projectionData.successfulProjections.length / (projectionData.failedProjections.length + projectionData.successfulProjections.length))*100)
+                feasiblePercentage: Math.round((projectionData.successfulProjections.length / (projectionData.failedProjections.length + projectionData.successfulProjections.length))*100),
+                pieDataSuccess: calculatePieDistribution(projectionData.successfulProjections),
+                pieDataFail: calculatePieDistribution(projectionData.failedProjections)
             }
         ))
     }
@@ -77,19 +110,65 @@ function Projection() {
             </div>
             <div className="projectionBreakDown">
                 <div className="projectedListWrap">
+                    <div>
+                        <Typography variant="h6" color="primary">Feasible Items</Typography>
+                        <Typography variant="caption" color="textSecondary">List of items that fits in the budget</Typography>
+                    </div>
                     <div className="projectedList">
+                        {
+                            showData.successfulExpense.map(scsItem => 
+                                <div className="projectedItemCard">
+                                    <Typography variant="h6" color="primary">{scsItem.itemName}</Typography>
+                                    <Typography variant="subtitle1" color="textPrimary">Price: {scsItem.cost}</Typography>
+                                    <Typography variant="subtitle2" color="textPrimary">Priority: {scsItem.priority.toUpperCase()}</Typography>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
                 <div className="projectedListWrap">
+                    <div>
+                        <Typography variant="h6" color="primary">Unattainable Items</Typography>
+                        <Typography variant="caption" color="textSecondary">List of items that doesn't fit in the budget</Typography>
+                    </div>
                     <div className="projectedList">
+                        {
+                            showData.failedExpense.map(flItem => 
+                                <div className="projectedItemCard">
+                                    <Typography variant="h6" color="primary">{flItem.itemName}</Typography>
+                                    <Typography variant="subtitle1" color="textPrimary">Price: {flItem.cost}</Typography>
+                                    <Typography variant="subtitle2" color="textPrimary">Priority: {flItem.priority.toUpperCase()}</Typography>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
                 <div className="projectedCategoryGraphs">
                     <div className="projectedCategoryDistribution">
-
+                        <Typography variant="subtitle1" color="primary">Category Distribution of Feasible Items</Typography>
+                        <PieChart
+                            series={[{
+                                data: showData.pieDataSuccess
+                            }]}
+                            slotProps={{
+                                legend: {
+                                    hidden: true
+                                }
+                            }}
+                        />
                     </div>
                     <div className="projectedCategoryDistribution">
-
+                        <Typography variant="subtitle1" color="primary">Category Distribution of Unattainable Items</Typography>
+                        <PieChart
+                            series={[{
+                                data: showData.pieDataFail
+                            }]}
+                            slotProps={{
+                                legend: {
+                                    hidden: true
+                                }
+                            }}
+                        />
                     </div>
                 </div>
             </div>
