@@ -31,6 +31,9 @@ function Home() {
 
     const handleShowGuide = () => window.open(`${window.location.origin}/guide.html`);
 
+    const handleShowAboutMe = () => window.open(`${window.location.origin}/aboutme.html`);
+
+    // TODO: check if policies needed
     return (
         <DataCleared.Provider value={clearData}>
             <div className="home">
@@ -38,8 +41,8 @@ function Home() {
                     <Typography variant="h5" color="textPrimary">Foresee</Typography>
                     <div className="quickLinks">
                         <Button color="primary" variant="contained" startIcon={<QuestionMark />} onClick={handleShowGuide}>Guide</Button>
-                        <Button color="primary" variant="contained" startIcon={<EmojiPeople />}>About Us</Button>
-                        <Button color="primary" variant="contained" startIcon={<Policy />}>Policies</Button>
+                        <Button color="primary" variant="contained" startIcon={<EmojiPeople />} onClick={handleShowAboutMe}>About Me</Button>
+                        {/* <Button color="primary" variant="contained" startIcon={<Policy />}>Policies</Button> */}
                         <Button color="error" variant="contained" startIcon={<DeleteForever />} onClick={handleClearMemory}>Clear Memory</Button>
                     </div>
                 </div>
