@@ -1,0 +1,9 @@
+{
+  "short_name": "Foresee",
+  "name": "Web app to predict purchases from expenses and budget.",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#c1839f",
+  "background_color": "#1c1c1c"
+}
