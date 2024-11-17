@@ -1,5 +1,7 @@
 # Guide to Foresee
 
+https://amekse.github.io/forseen/
+
 ## Add Budget
 You can add a budget for specific months or for a range of months with the same amount.
 
