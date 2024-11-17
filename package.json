@@ -2,6 +2,7 @@
   "name": "forseen",
   "version": "11.24.0",
   "private": true,
+  "homepage": "https://amekse.github.io/forseen",
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
@@ -21,8 +22,7 @@
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
     "uuid": "^11.0.2",
-    "web-vitals": "^2.1.4",
-    "homepage": "https://amekse.github.io/forseen"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
