@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Home from './components/Home';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Typography } from '@mui/material';
 
 function App() {
   const theme = createTheme({
@@ -58,9 +59,19 @@ function App() {
 
   return (
     <div className="App">
-      <ThemeProvider theme={theme}>
-        <Home />
-      </ThemeProvider>
+      <div className="Web">
+        <ThemeProvider theme={theme}>
+          <Home />
+        </ThemeProvider>
+      </div>
+      <div className="Mobile">
+        <ThemeProvider theme={theme}>
+          <div style={{ backgroundColor: "#1c1c1c", width: '100%', height: '100%', padding: '16px' }}>
+            <Typography variant='h5' color="primary" fontWeight={800} >Foresee</Typography>
+            <Typography variant='h6' color="textPrimary" >I really apologize, but mobile UI is not ready yet.</Typography>
+          </div>
+        </ThemeProvider>
+      </div>
     </div>
   );
 }
